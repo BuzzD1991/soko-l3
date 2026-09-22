@@ -234,70 +234,69 @@ MODULES = [
         "nr": 1,
         "bereich": "Personale Kompetenzen",
         "titel": "Emotionen erkennen und verstehen",
-        "kurz": "Im ersten Modul legen wir den Grundstein für einen souveränen 
-        Umgang mit dem eigenen emotionalen Erleben. Wir beschäftigen uns damit, 
-        wie Emotionen entstehen, was sie ausmacht und welchen Sinn und Zweck sie 
-        erfüllen. Darauf aufbauend betrachten wir, welchen Einfluss Emotionen auf 
-        unser Verhalten haben und welche uns besonders häufig im Schulalltag begegnen.",
+        "kurz": "Im ersten Modul legen wir den Grundstein für einen souveränen" 
+        "Umgang mit dem eigenen emotionalen Erleben. Wir beschäftigen uns damit," 
+        "wie Emotionen entstehen, was sie ausmacht und welchen Sinn und Zweck sie" 
+        "erfüllen. Darauf aufbauend betrachten wir, welchen Einfluss Emotionen auf" 
+        "unser Verhalten haben und welche uns besonders häufig im Schulalltag begegnen.",
         "status": "in Entwicklung",
     },
     {
         "nr": 2,
         "bereich": "Personale Kompetenzen",
         "titel": "Emotionen regulieren",
-        "kurz": "Im zweiten Modul widmen wir uns der Frage, wie es gelingen kann, 
-        auch in fordernden Momenten handlungsfähig zu bleiben. Konkret betrachten wir
-        auf Basis des bereits angeeigneten Verständnisses zum Thema Emotionen 
-        verschiedene Strategien zur Emotionsregulation im Schulalltag."
-        "reiner Stressvermeidung.",
+        "kurz": "Im zweiten Modul widmen wir uns der Frage, wie es gelingen kann," 
+        "auch in fordernden Momenten handlungsfähig zu bleiben. Konkret betrachten wir"
+        "auf Basis des bereits angeeigneten Verständnisses zum Thema Emotionen "
+        "verschiedene Strategien zur Emotionsregulation im Schulalltag.",
         "status": "in Entwicklung",
     },
     {
         "nr": 3,
         "bereich": "Personale Kompetenzen",
         "titel": "Achtsamkeit und Commitment",
-        "kurz": "Im dritten Modul behandeln wir verschiedene Ansätze, um Achtsamkeit 
-        im Schulalltag zu üben und Akzeptanz für belastende Gedanken und Emotionen zu 
-        erreichen. Darüber hinaus  laden wir die teilnehmenden Lehrkräfte dazu ein, 
-        ihre individuellen berufsbezogenen Werte zu reflektieren und erarbeiten auf 
-        dieser Basis Möglichkeiten, ihr berufliches Handeln (wieder) an ebendiesen 
-        Werten auszurichten.",
+        "kurz": "Im dritten Modul behandeln wir verschiedene Ansätze, um Achtsamkeit"
+        "im Schulalltag zu üben und Akzeptanz für belastende Gedanken und Emotionen zu" 
+        "erreichen. Darüber hinaus  laden wir die teilnehmenden Lehrkräfte dazu ein," 
+        "ihre individuellen berufsbezogenen Werte zu reflektieren und erarbeiten auf"
+        "dieser Basis Möglichkeiten, ihr berufliches Handeln (wieder) an ebendiesen" 
+        "Werten auszurichten.",
         "status": "in Entwicklung",
     },
     {
         "nr": 4,
         "bereich": "Soziale Kompetenzen",
         "titel": "Perspektivübernahme",
-        "kurz": "Im vierten Modul richten wir unseren Blick auf die häufigsten 
-        Interaktionspartner:innen im schulischen Alltag: die Schüler:innen. Wir 
-        betrachten Möglichkeiten, ihre Perspektive einzunehmen und ihre Handlungen 
-        nachzuvollziehen, um Ansatzpunkte für eine gelingende Verständigung im 
-        Unterricht und darüber hinaus zu finden.",
+        "kurz": "Im vierten Modul richten wir unseren Blick auf die häufigsten" 
+        "Interaktionspartner:innen im schulischen Alltag: die Schüler:innen. Wir" 
+        "betrachten Möglichkeiten, ihre Perspektive einzunehmen und ihre Handlungen" 
+        "nachzuvollziehen, um Ansatzpunkte für eine gelingende Verständigung im"
+        "Unterricht und darüber hinaus zu finden.",
         "status": "in Entwicklung",
     },
     {
         "nr": 5,
         "bereich": "Soziale Kompetenzen",
         "titel": "Beziehungsgestaltung",
-        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der 
-        Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine 
-        Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen 
-        Voraussetzungen für eine professionelle Wahrnehmung der 
-        Lehrkraft-Schüler:innen-Beziehung und wie der Unterricht so gestaltet 
-        werden kann, dass er die  psychologischen Grundbedürfnisse nach 
-        Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
+        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der" 
+        "Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine"
+        "Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen"
+        "Voraussetzungen für eine professionelle Wahrnehmung der"
+        "Lehrkraft-Schüler:innen-Beziehung und wie der Unterricht so gestaltet" 
+        "werden kann, dass er die  psychologischen Grundbedürfnisse nach" 
+        "Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
         "status": "in Entwicklung",
     },
     {
         "nr": 6,
         "bereich": "Soziale Kompetenzen",
         "titel": "Konflikte konstruktiv lösen",
-        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der 
-        Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine 
-        Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen 
-        Voraussetzungen für eine professionelle Wahrnehmung der Lehrkraft-Schüler:innen-Beziehung 
-        und wie der Unterricht so gestaltet werden kann, dass er die  psychologischen 
-        Grundbedürfnisse nach Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
+        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der" 
+        "Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine" 
+        "Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen" 
+        "Voraussetzungen für eine professionelle Wahrnehmung der Lehrkraft-Schüler:innen-Beziehung" 
+        "und wie der Unterricht so gestaltet werden kann, dass er die  psychologischen" 
+        "Grundbedürfnisse nach Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
         "status": "vollständig ausgearbeitet",
     },
 ]

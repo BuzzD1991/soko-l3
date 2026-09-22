@@ -31,7 +31,7 @@ st.markdown(
 st.divider()
 
 # =============================================================================
-# ZWEI SÄULEN
+# ZWEI KOMPETENZBEREICHE
 # =============================================================================
 
 st.subheader("Zwei Kompetenzbereiche")
@@ -54,6 +54,74 @@ with pillar_col2:
         """
         In den folgenden drei Modulen weiten wir den Blick auf die tägliche Zusammenarbeit 
         mit den Schüler:innen.
+        """
+    )
+
+st.divider()
+
+# =============================================================================
+# SECHS MODULE
+# =============================================================================
+
+st.subheader("Sechs Module")
+
+module_col123, module_col456 = st.columns(2)
+
+with module_col123:
+    st.markdown("#### Modul 1 – Emotionen erkennen und verstehen")
+    st.markdown(
+        """
+        Im ersten Modul legen wir den Grundstein für einen souveränen Umgang mit dem eigenen emotionalen Erleben. 
+        Wir beschäftigen uns damit, wie Emotionen entstehen, was sie ausmacht und welchen Sinn und Zweck sie erfüllen. 
+        Darauf aufbauend betrachten wir, welchen Einfluss Emotionen auf unser Verhalten haben und welche uns besonders 
+        häufig im Schulalltag begegnen.
+        """
+    )
+    
+    st.markdown("#### Modul 2 – Emotionen regulieren")
+    st.markdown(
+        """
+        Im zweiten Modul widmen wir uns der Frage, wie es gelingen kann, auch in fordernden Momenten handlungsfähig zu bleiben. 
+        Konkret betrachten wir auf Basis des bereits angeeigneten Verständnisses zum Thema Emotionen verschiedene Strategien 
+        zur Emotionsregulation im Schulalltag.
+        """
+    )
+    
+    st.markdown("#### Modul 3 – Achtsamkeit und Commitment")
+    st.markdown(
+        """
+        Im dritten Modul behandeln wir verschiedene Ansätze, um Achtsamkeit im Schulalltag zu üben und Akzeptanz für 
+        belastende Gedanken und Emotionen zu erreichen. Darüber hinaus  laden wir die teilnehmenden Lehrkräfte dazu ein, 
+        ihre individuellen berufsbezogenen Werte zu reflektieren und erarbeiten auf dieser Basis Möglichkeiten, ihr 
+        berufliches Handeln (wieder) an ebendiesen Werten auszurichten.
+        """
+    )
+
+with module_col456:
+    st.markdown("#### Modul 4 – Perspektivübernahme")
+    st.markdown(
+        """
+        Im vierten Modul richten wir unseren Blick auf die häufigsten Interaktionspartner:innen im schulischen Alltag: die Schüler:innen. 
+        Wir betrachten Möglichkeiten, ihre Perspektive einzunehmen und ihre Handlungen nachzuvollziehen, um Ansatzpunkte für eine gelingende 
+        Verständigung im Unterricht und darüber hinaus zu finden.
+        """
+    )
+
+    st.markdown("#### Modul 5 – Beziehungsgestaltung")
+    st.markdown(
+        """
+        Im fünften Modul stellen wir positive Ausgestaltung der Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine Grundlage 
+        erfolgreichen Lernens darstellt. Wir besprechen die notwendigen Voraussetzungen für eine professionelle Wahrnehmung der Lehrkraft-Schüler:innen-Beziehung 
+        und wie der Unterricht so gestaltet werden kann, dass er die  psychologischen Grundbedürfnisse nach Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.
+        """
+    )
+
+    st.markdown("#### Modul 6 – Konflikte konstruktiv lösen")
+    st.markdown(
+        """
+        Im sechsten Modul widmen wir uns abschließend dem sozialen Konflikt, der unweigerlich zum schulischen Alltag dazugehört. Wir reflektieren die verschiedenen Haltungen 
+        gegenüber Konflikten und die jeweiligen Konsequenzen. Zudem erarbeiten wir konstruktive Verhaltensmöglichkeiten in der akuten Konfliktsituation sowie für 
+        die nachhaltige Lösung von Konflikten.
         """
     )
 

@@ -224,10 +224,7 @@ def display_tags(labels):
 # 4. INHALTE DER FORTBILDUNG
 # =============================================================================
 #
-# Zentrale, editierbare Inhaltsbasis für die Programmseiten. Modul 6 ist
-# gemäß aktuellem Bearbeitungsstand vollständig ausgearbeitet; Module 1–5
-# sind hier als kurze Arbeitsstände hinterlegt und sollten durch die
-# jeweiligen Sitzungspläne ersetzt werden, sobald diese vorliegen.
+# Zentrale, editierbare Inhaltsbasis für die Programmseiten.
 
 MODULES = [
     {

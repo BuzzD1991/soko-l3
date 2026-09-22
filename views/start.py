@@ -31,15 +31,15 @@ st.markdown(
 st.divider()
 
 # =============================================================================
-# ZWEI KOMPETENZBEREICHE
+# ZWEI KOMPETENZBEREICHE / SECHS NODULE
 # =============================================================================
 
-st.subheader("Zwei Kompetenzbereiche")
+st.subheader("Zwei Kompetenzbereiche, Sechs Module")
 
 pillar_col1, pillar_col2 = st.columns(2)
 
 with pillar_col1:
-    st.markdown("#### Personale Kompetenzen")
+    st.markdown("### Personale Kompetenzen")
     st.markdown(
         """
         In den ersten drei Modulen richten wir den Blick zunächst auf die eigene Person: 
@@ -48,26 +48,6 @@ with pillar_col1:
         """
     )
 
-with pillar_col2:
-    st.markdown("#### Soziale Kompetenzen")
-    st.markdown(
-        """
-        In den folgenden drei Modulen weiten wir den Blick auf die tägliche Zusammenarbeit 
-        mit den Schüler:innen.
-        """
-    )
-
-st.divider()
-
-# =============================================================================
-# SECHS MODULE
-# =============================================================================
-
-st.subheader("Sechs Module")
-
-module_col123, module_col456 = st.columns(2)
-
-with module_col123:
     st.markdown("#### Modul 1 – Emotionen erkennen und verstehen")
     st.markdown(
         """
@@ -97,7 +77,15 @@ with module_col123:
         """
     )
 
-with module_col456:
+with pillar_col2:
+    st.markdown("### Soziale Kompetenzen")
+    st.markdown(
+        """
+        In den folgenden drei Modulen weiten wir den Blick auf die tägliche Zusammenarbeit 
+        mit den Schüler:innen.
+        """
+    )
+
     st.markdown("#### Modul 4 – Perspektivübernahme")
     st.markdown(
         """

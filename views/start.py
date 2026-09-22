@@ -12,43 +12,21 @@ st.title("SOKO-L³ | Lehrkräftefortbildung Sozial-emotionale Kompetenzen")
 
 st.markdown(
     """
-    **Eine sechsteilige Fortbildung für Lehrkräfte an Schulen in
+    **Ein sechsteiliges Fortbildungsangebot für Lehrkräfte an Schulen in
     benachteiligten Lagen bzw. mit Schülerschaft mit hohen Bildungsrisiken.**
 
     Entwickelt im Rahmen der wissenschaftlichen Begleitung eines
     Startchancen-Programm-Projekts am Interdisziplinären Kompetenzzentrum
-    Überfachliches Lernen (IKOM ÜL). Die Fortbildung folgt dem Prinzip
-    *Train-the-Teacher-as-Multiplier*: Lehrkräfte entwickeln zunächst ihre
-    eigenen sozial-emotionalen Kompetenzen (SEK) und übertragen diese
-    anschließend über passende Materialien direkt in den Unterricht.
+    Überfachliches Lernen (IKOM ÜL). Die teilnehmenden Lehrkräfte stärken zunächst
+    ihre eigenen sozial-emotionalen Kompetenzen; diese sollen als Grundlage für
+    einen souveränen Umgang mit herausfordernden Situationen und die Gestaltung 
+    tragfähiger Beziehungen zu den Schüler:innen dienen. Zusätzlich erhalten die
+    Lehrkräfte passgenaue Materialien, um die Inhalte direkt mit ihren Klassen zu erarbeiten.
+    Die Fortbildung vermittelt unmittelbar einsetzbare Strategien für den Schulalltag, 
+    die sich an den Bedarfen von Schulen mit besonderen Herausforderungen orientieren, 
+    ohne eine defizitorientierte Perspektive einzunehmen.
     """
 )
-
-st.info(
-    "Die Fortbildung ist ressourcen- und stärkenorientiert angelegt – "
-    "bewusst **nicht** defizit- oder belastungszentriert."
-)
-
-st.divider()
-
-# =============================================================================
-# KENNZAHLEN
-# =============================================================================
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.metric("Module", "6")
-
-with col2:
-    n_done = sum(1 for m in MODULES if m["status"] == "vollständig ausgearbeitet")
-    st.metric("Vollständig ausgearbeitet", n_done)
-
-with col3:
-    st.metric("Kompetenzbereiche", "2")
-
-with col4:
-    st.metric("Ansatz", "Train-the-Trainer")
 
 st.divider()
 
@@ -64,9 +42,9 @@ with pillar_col1:
     st.markdown("#### Personale Kompetenzen")
     st.markdown(
         """
-        Emotionswahrnehmung und -verstehen, Emotionsregulation sowie
-        Achtsamkeit und Wertorientierung (ACT-basiert) – die Grundlage,
-        auf der professionelles Handeln im Schulalltag aufbaut.
+        In den ersten drei Modulen richten wir den Blick zunächst auf die eigene Person: 
+        Wir vertiefen unser Verständnis für das individuelle emotionale Erleben und stärken 
+        die persönliche Grundlage für einen souveränen Schulalltag.
         """
     )
 
@@ -74,9 +52,8 @@ with pillar_col2:
     st.markdown("#### Soziale Kompetenzen")
     st.markdown(
         """
-        Perspektivübernahme und Empathie, beziehungsorientierter Unterricht
-        sowie konstruktive Konfliktbewältigung – die Übertragung ins
-        Miteinander mit der Schülerschaft.
+        In den folgenden drei Modulen weiten wir den Blick auf die tägliche Zusammenarbeit 
+        mit den Schüler:innen.
         """
     )
 

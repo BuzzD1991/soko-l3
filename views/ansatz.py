@@ -15,11 +15,8 @@ st.subheader("Zielgruppe")
 st.markdown(
     """
     Die Fortbildung richtet sich an Lehrkräfte an Schulen in benachteiligten
-    Lagen bzw. mit Schülerschaft mit hohen Bildungsrisiken – entwickelt im
-    Rahmen des Startchancen-Programms. Die Ansprache erfolgt bewusst
-    ressourcen- und stärkenorientiert: Die Fortbildung nimmt die realen
-    Herausforderungen des Schulalltags ernst, ohne Schülerschaft oder
-    Lehrkräfte defizitorientiert zu rahmen.
+    Lagen bzw. mit Schülerschaft mit hohen Bildungsrisiken und erfolgt im
+    Rahmen des Startchancen-Programms.
     """
 )
 
@@ -32,9 +29,11 @@ st.divider()
 st.subheader("Train-the-Teacher-as-Multiplier")
 
 st.markdown(
-    "Die Fortbildung folgt einem zweistufigen Modell: Lehrkräfte entwickeln "
-    "zunächst ihre **eigenen** sozial-emotionalen Kompetenzen, bevor "
-    "passende Materialien direkt mit der Schülerschaft eingesetzt werden."
+    """
+    Die Fortbildung folgt einem zweistufigen Modell: Lehrkräfte entwickeln
+    zunächst ihre eigenen sozial-emotionalen Kompetenzen, bevor passende 
+    Materialien direkt mit der Schülerschaft eingesetzt werden.
+    """
 )
 
 step_col1, step_col2 = st.columns(2)

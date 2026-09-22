@@ -8,13 +8,13 @@ st.title("Module im Überblick")
 
 st.markdown(
     """
-    Die Fortbildung gliedert sich in sechs Module, verteilt auf zwei
-    Kompetenzbereiche.
+    Die Fortbildung gliedert sich in zwei Kompetenzbereiche mit je drei Modulen, beginnend beim Wissen
+    und Verständnis um die eigenen Emotionen und Reflexion der inneren Haltung hin zur Perspektivenübernahme, 
+    positiven Gestaltung von Beziehungen und konstruktiven Begegnung von Konflikten im Klassenzimmer.
     """
 )
 
 st.divider()
-
 
 def render_module_card(module):
 

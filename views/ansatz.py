@@ -42,9 +42,8 @@ with step_col1:
     st.markdown(
         """
         <div class="info-card">
-        <h4>Schritt 1 · Eigene SEK</h4>
-        Lehrkräfte durchlaufen die sechs Module selbst – als Grundlage für
-        professionelles Handeln, nicht als zusätzliches Curriculum.
+        <h4>Schritt 1 · Stärkung der eigenen sozial-emotionalen Kompetenzten</h4>
+        Als Grundlage für ihr professionelles Handeln durchlaufen die Lehrkräfte die sechs Module selbst.
         </div>
         """,
         unsafe_allow_html=True,
@@ -55,7 +54,7 @@ with step_col2:
         """
         <div class="info-card">
         <h4>Schritt 2 · Übertragung in den Unterricht</h4>
-        Über die begleitende Übungssammlung (Kernels) werden passende
+        Über die begleitende Übungssammlung werden passende
         Aktivitäten direkt und niedrigschwellig in den laufenden Unterricht
         eingebettet.
         </div>
@@ -77,21 +76,17 @@ st.markdown(
     Quality* von Rimm-Kaufman und Hamre (2010): Die sozial-emotionale
     Kompetenz der Lehrkraft selbst wird darin als eigenständiger
     Wirkfaktor für Unterrichtsqualität und Schüler:innen-Entwicklung
-    verstanden – nicht nur als Rahmenbedingung.
+    verstanden.
 
-    Investitionen in die SEK von Lehrkräften zahlen sich dabei potenziell
+    Investitionen in die sozial-emotionalen Kompetenzen von Lehrkräften zahlen sich dabei potenziell
     in mehreren Bereichen zugleich aus: für die Lehrkraft selbst
     (Wohlbefinden, Beanspruchungserleben), für die Schüler:innen
     (Beziehungsqualität, Lernklima) und für die Schule als System
     (Unterrichtsqualität, Bindung von Personal).
-
-    *Hinweis: Dieser Abschnitt ist ein Platzhalter – bitte durch die*
-    *bereits vorliegende, mit Effektstärken belegte Formulierung aus dem*
-    *Fortbildungstext ersetzen.*
     """
 )
 
-with st.expander("Weitere theoretische Anker"):
+with st.expander("Ausgewählte Quellen"):
     st.markdown(
         """
         - Boustani et al. (2015)

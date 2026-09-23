@@ -321,6 +321,7 @@ def inject_css():
             --sek-sage: #7C9885;
             --sek-sage-soft: rgba(124, 152, 133, 0.14);
             --sek-slate: #4B5563;
+            --sek-slate-soft: rgba(75, 85, 99, 0.14);
         }
 
         /* Exercise cards */
@@ -440,6 +441,91 @@ def inject_css():
 
         .info-card h4 {
             margin-top: 0;
+        }
+
+        /* Kompetenzbereich-Banner (Startseite) – deutliche Trennung der
+           beiden Inhaltsbereiche über kräftige Farbflächen statt nur Text. */
+        .pillar-header {
+            padding: 1.1rem 1.4rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .pillar-header.personale {
+            background-color: var(--sek-sage);
+        }
+
+        .pillar-header.soziale {
+            background-color: var(--sek-slate);
+        }
+
+        .pillar-header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .pillar-header-sub {
+            font-size: 0.9rem;
+            opacity: 0.92;
+            line-height: 1.4;
+        }
+
+        /* Modulkarten mit ausführlichem Fließtext (Startseite) */
+        .module-card-wide {
+            padding: 1.2rem 1.4rem;
+            border-radius: 12px;
+            border: 1px solid rgba(128,128,128,0.2);
+            background-color: rgba(128,128,128,0.025);
+            margin-bottom: 0.9rem;
+        }
+
+        .module-card-wide.accent-personale {
+            border-left: 5px solid var(--sek-sage);
+        }
+
+        .module-card-wide.accent-soziale {
+            border-left: 5px solid var(--sek-slate);
+        }
+
+        .module-card-head {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .module-card-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.9rem;
+            height: 1.9rem;
+            min-width: 1.9rem;
+            border-radius: 50%;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .module-card-badge.personale {
+            background-color: var(--sek-sage);
+        }
+
+        .module-card-badge.soziale {
+            background-color: var(--sek-slate);
+        }
+
+        .module-card-title {
+            font-size: 1.05rem;
+            font-weight: 650;
+        }
+
+        .module-card-text {
+            color: rgba(55,55,55,0.92);
+            line-height: 1.55;
+            font-size: 0.94rem;
         }
 
         </style>

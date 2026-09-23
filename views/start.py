@@ -8,7 +8,9 @@ inject_css()
 # HERO
 # =============================================================================
 
-st.title("SOKO-L³ | Lehrkräftefortbildung Sozial-emotionale Kompetenzen")
+st.title(
+    "SOKO-L³ | Lehrkräftefortbildung zur Förderung der sozial-emotionalen Kompetenzen"
+)
 
 st.markdown(
     """
@@ -17,7 +19,8 @@ st.markdown(
 
     **Entwickelt im Rahmen der wissenschaftlichen Begleitung eines
     Startchancen-Programm-Projekts am Interdisziplinären Kompetenzzentrum
-    Überfachliches Lernen (IKOM ÜL).** 
+    Überfachliches Lernen (IKOM ÜL); gefördert durch das Bundesministerium 
+    für Bildung, Familie, Senioren, Frauen und Jugend.** 
     
     Die teilnehmenden Lehrkräfte stärken zunächst
     ihre eigenen sozial-emotionalen Kompetenzen; diese sollen als Grundlage für

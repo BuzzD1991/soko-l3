@@ -4,8 +4,25 @@ Gemeinsame Daten-, Filter- und Style-Logik der Fortbildungs-Website.
 Wird von allen Seiten unter views/ importiert. So existiert jede Funktion
 (Datenladen, Filterung, Tag-Rendering, CSS) nur an einer Stelle und
 Änderungen (z. B. an ALTER_COLS) wirken automatisch überall.
+
+Datengrundlage (Stand: überarbeitete Übungssammlung): Die Excel-Datei
+besteht aus zwei Tabellenblättern, die über die Spalte "Übung" 1:1
+zusammengehören:
+
+- "Übersicht"      – eine Zeile je Übung mit Kurzbeschreibung, Dauer,
+                      Zielgruppe, Altersstufen-Markierungen (0/1),
+                      Anwendungsfällen, Material, Lernzielen sowie den
+                      Quellenangaben (Internetquelle/Originalquelle).
+- "Übungsabläufe"  – die ausführliche Anleitung je Übung in drei Phasen
+                      (Vor der Übung / Während der Übung / Nach der
+                      Übung).
+
+load_data() führt beide Blätter zu einer einzigen Tabelle zusammen, damit
+der Rest des Codes (Filter, Kartenanzeige) mit genau einer Zeile pro
+Übung arbeiten kann.
 """
 
+import html
 from pathlib import Path
 
 import pandas as pd
@@ -15,31 +32,69 @@ import streamlit as st
 # 1. DATENQUELLE
 # =============================================================================
 
-DATA_FILE = Path(__file__).parent / "Übungssammlung_GGIE.xlsx"
+DATA_FILE = Path(__file__).parent / "Website_Übungssammlung.xlsx"
+
+
+def resolve_data_file():
+    """Ermittelt die zu ladende Excel-Datei.
+
+    Weicht der tatsächliche Dateiname ab (z. B. durch eine abweichende
+    Unicode-Normalisierung des "Ü" beim Hochladen auf manchen Servern),
+    wird ersatzweise die zuletzt geänderte .xlsx im Verzeichnis
+    verwendet – nicht die alphabetisch erste. Das verhindert, dass eine
+    ältere, liegen gebliebene Excel-Datei stillschweigend Vorrang vor der
+    aktuellen bekommt.
+    """
+
+    if DATA_FILE.exists():
+        return DATA_FILE
+
+    candidates = sorted(
+        Path(__file__).parent.glob("*.xlsx"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+
+    if not candidates:
+        raise FileNotFoundError(
+            f"Keine Excel-Datei gefunden. Erwartet wurde: {DATA_FILE.name}"
+        )
+
+    return candidates[0]
 
 
 @st.cache_data
+def load_data_cached(file_path, file_mtime):
+    # file_mtime fließt NUR in den Cache-Key ein (st.cache_data cached nach
+    # Funktionsargumenten). Wird die Excel-Datei auf dem Server ausgetauscht,
+    # ändert sich ihr Änderungsdatum automatisch mit – Streamlit erkennt
+    # dadurch von selbst, dass neu geladen werden muss, auch ohne manuelles
+    # "Clear cache" / Neustart der App.
+
+    # Kopfzeile steht in Zeile 3 (0-indexiert: header=2), Daten ab Zeile 4 –
+    # beide Blätter beginnen mit zwei einleitenden Zeilen (Titel, Hinweis).
+    df_overview = pd.read_excel(file_path, sheet_name="Übersicht", header=2)
+    df_steps = pd.read_excel(file_path, sheet_name="Übungsabläufe", header=2)
+
+    df_overview.columns = df_overview.columns.str.strip()
+    df_steps.columns = df_steps.columns.str.strip()
+
+    df_overview["Übung"] = df_overview["Übung"].astype(str).str.strip()
+    df_steps["Übung"] = df_steps["Übung"].astype(str).str.strip()
+
+    # Zusammenführen auf Basis der Übungsbezeichnung. "left", damit eine
+    # Übung auch ohne hinterlegten Ablauf in der Sammlung erscheint (mit
+    # leeren Durchführungs-Feldern) statt stillschweigend zu verschwinden.
+    df_uebungen = df_overview.merge(
+        df_steps, on="Übung", how="left", validate="one_to_one"
+    )
+
+    return df_uebungen.reset_index(drop=True)
+
+
 def load_data():
-    if not DATA_FILE.exists():
-        # Fallback: falls der Dateiname erneut abweicht, wird jede
-        # vorhandene .xlsx im Projektverzeichnis als Datenquelle akzeptiert.
-        candidates = sorted(Path(__file__).parent.glob("*.xlsx"))
-        if not candidates:
-            raise FileNotFoundError(
-                f"Keine Excel-Datei gefunden. Erwartet wurde: {DATA_FILE.name}"
-            )
-        data_file = candidates[0]
-    else:
-        data_file = DATA_FILE
-
-    df_res = pd.read_excel(data_file, sheet_name="Tabelle1")
-    df_raw = pd.read_excel(data_file, sheet_name="Tabelle2")
-
-    # Spaltennamen von versehentlichen Leerzeichen befreien.
-    df_res.columns = df_res.columns.str.strip()
-    df_raw.columns = df_raw.columns.str.strip()
-
-    return df_res, df_raw
+    data_file = resolve_data_file()
+    return load_data_cached(str(data_file), data_file.stat().st_mtime)
 
 
 # =============================================================================
@@ -47,43 +102,20 @@ def load_data():
 # =============================================================================
 #
 # WICHTIG: Der Key ist das UI-Label (Filter, Tags), der Value MUSS exakt
-# dem Spaltennamen in Tabelle2 entsprechen.
+# dem Spaltennamen im Tabellenblatt "Übersicht" entsprechen.
 
 ALTER_COLS = {
-    "Kindergarten / frühe GS": "Kindergarten, frühe Grundschule",
-    "Späte GS": "Späte Grundschule",
-    "Sek I": "Sekundarstufe I",
-    "Sek II": "Sekundarstufe II",
-    "Hochschule": "Hochschule",
-    "Lehrkräfte": "Lehrkräfte",
-}
-
-SEL_COLS = {
-    "Self-Awareness": "Self-Awareness",
-    "Self-Management": "Self-Management",
-    "Social Awareness": "Social Awareness",
-    "Relationship Skills": "Relationship Skills",
-    "Resp. Decision-Making": "Resp. Decision-Making",
-}
-
-MIND_COLS = {
-    "Open Awareness": "Open Awareness",
-    "Non-Judgment": "Non-Judgment",
-    "Focused Attention": "Focused Attention",
+    "Grundschule": "Grundschule",
+    "Sekundarstufe I": "Sekundarstufe I",
+    "Sekundarstufe II": "Sekundarstufe II",
 }
 
 TEXT_COLUMNS = [
     "Übung",
-    "Übersetzung",
-    "Kurzbeschreibung",
+    "Kurzbeschreibung der Übung",
+    "Zielgruppe",
     "Lernziele",
     "Anwendungsfälle",
-]
-
-RESOURCE_COLUMNS = [
-    "Name",
-    "Description",
-    "PAGE URL",
 ]
 
 # =============================================================================
@@ -118,32 +150,27 @@ def safe_text(row, column):
     return str(value).strip()
 
 
-def get_categories(row):
+def safe_html(row, column):
+    """Wie safe_text, aber HTML-escaped – für die Verwendung in
+    unsafe_allow_html=True-Blöcken, damit z. B. ein "<" oder "&" in einer
+    künftigen Dateneingabe das Karten-Markup nicht zerstört."""
 
-    alter = [
+    return html.escape(safe_text(row, column))
+
+
+def get_altersstufen(row):
+    """Liefert die Liste der für diese Übung markierten Altersstufen."""
+
+    return [
         label
         for label, column in ALTER_COLS.items()
         if column in row.index and is_marked(row[column])
     ]
 
-    sel = [
-        label
-        for label, column in SEL_COLS.items()
-        if column in row.index and is_marked(row[column])
-    ]
 
-    mind = [
-        label
-        for label, column in MIND_COLS.items()
-        if column in row.index and is_marked(row[column])
-    ]
+def filter_data(df_uebungen, selected_alter, search_term):
 
-    return alter, sel, mind
-
-
-def filter_data(df_raw, selected_alter, selected_sel, selected_mind, search_term):
-
-    df_raw = df_raw.copy()
+    df_uebungen = df_uebungen.copy()
 
     # -------------------------------------------------------------------
     # Altersstufen
@@ -152,38 +179,14 @@ def filter_data(df_raw, selected_alter, selected_sel, selected_mind, search_term
     if selected_alter:
 
         columns = [
-            ALTER_COLS[x] for x in selected_alter if ALTER_COLS[x] in df_raw.columns
+            ALTER_COLS[x]
+            for x in selected_alter
+            if ALTER_COLS[x] in df_uebungen.columns
         ]
 
         if columns:
-            mask = df_raw[columns].map(is_marked).any(axis=1)
-            df_raw = df_raw[mask]
-
-    # -------------------------------------------------------------------
-    # SEL
-    # -------------------------------------------------------------------
-
-    if selected_sel:
-
-        columns = [SEL_COLS[x] for x in selected_sel if SEL_COLS[x] in df_raw.columns]
-
-        if columns:
-            mask = df_raw[columns].map(is_marked).any(axis=1)
-            df_raw = df_raw[mask]
-
-    # -------------------------------------------------------------------
-    # Achtsamkeit
-    # -------------------------------------------------------------------
-
-    if selected_mind:
-
-        columns = [
-            MIND_COLS[x] for x in selected_mind if MIND_COLS[x] in df_raw.columns
-        ]
-
-        if columns:
-            mask = df_raw[columns].map(is_marked).any(axis=1)
-            df_raw = df_raw[mask]
+            mask = df_uebungen[columns].map(is_marked).any(axis=1)
+            df_uebungen = df_uebungen[mask]
 
     # -------------------------------------------------------------------
     # Volltextsuche
@@ -193,12 +196,12 @@ def filter_data(df_raw, selected_alter, selected_sel, selected_mind, search_term
 
         term = search_term.lower()
 
-        available_columns = [x for x in TEXT_COLUMNS if x in df_raw.columns]
+        available_columns = [x for x in TEXT_COLUMNS if x in df_uebungen.columns]
 
         if available_columns:
 
             mask = (
-                df_raw[available_columns]
+                df_uebungen[available_columns]
                 .fillna("")
                 .astype(str)
                 .apply(
@@ -207,9 +210,9 @@ def filter_data(df_raw, selected_alter, selected_sel, selected_mind, search_term
                 .any(axis=1)
             )
 
-            df_raw = df_raw[mask]
+            df_uebungen = df_uebungen[mask]
 
-    return df_raw.reset_index(drop=True)
+    return df_uebungen.reset_index(drop=True)
 
 
 def display_tags(labels):
@@ -220,80 +223,91 @@ def display_tags(labels):
     return "  ".join([f'<span class="tag">{label}</span>' for label in labels])
 
 
+def render_quelle(row):
+    """Baut die Quellenangabe einer Übung (Link + Originalquelle) als
+    Markdown. Fehlt eine der beiden Angaben, wird nur die vorhandene
+    gezeigt; fehlen beide, ein neutraler Hinweistext."""
+
+    url = safe_text(row, "Internetquelle")
+    original = safe_text(row, "Originalquelle")
+
+    parts = []
+
+    if url:
+        parts.append(f"🔗 [{url}]({url})")
+
+    if original:
+        parts.append(f"📖 {original}")
+
+    if not parts:
+        return "Keine Angaben vorhanden."
+
+    return "  \n".join(parts)
+
+
 # =============================================================================
 # 4. INHALTE DER FORTBILDUNG
 # =============================================================================
 #
-# Zentrale, editierbare Inhaltsbasis für die Programmseiten.
+# Zentrale, editierbare Inhaltsbasis für die Programmseiten. Modul 6 ist
+# gemäß aktuellem Bearbeitungsstand vollständig ausgearbeitet; Module 1–5
+# sind hier als kurze Arbeitsstände hinterlegt und sollten durch die
+# jeweiligen Sitzungspläne ersetzt werden, sobald diese vorliegen.
 
 MODULES = [
     {
         "nr": 1,
         "bereich": "Personale Kompetenzen",
-        "titel": "Emotionen erkennen und verstehen",
-        "kurz": "Im ersten Modul legen wir den Grundstein für einen souveränen" 
-        "Umgang mit dem eigenen emotionalen Erleben. Wir beschäftigen uns damit," 
-        "wie Emotionen entstehen, was sie ausmacht und welchen Sinn und Zweck sie" 
-        "erfüllen. Darauf aufbauend betrachten wir, welchen Einfluss Emotionen auf" 
-        "unser Verhalten haben und welche uns besonders häufig im Schulalltag begegnen.",
+        "titel": "Emotionswahrnehmung und -verstehen",
+        "kurz": "Eigene Emotionen differenziert wahrnehmen, benennen und "
+        "einordnen können – als Grundlage für Ko-Regulation im Klassenraum.",
         "status": "in Entwicklung",
     },
     {
         "nr": 2,
         "bereich": "Personale Kompetenzen",
-        "titel": "Emotionen regulieren",
-        "kurz": "Im zweiten Modul widmen wir uns der Frage, wie es gelingen kann," 
-        "auch in fordernden Momenten handlungsfähig zu bleiben. Konkret betrachten wir"
-        "auf Basis des bereits angeeigneten Verständnisses zum Thema Emotionen "
-        "verschiedene Strategien zur Emotionsregulation im Schulalltag.",
+        "titel": "Emotionsregulation",
+        "kurz": "Handhabbare Strategien zur Regulation eigener Emotionen in "
+        "belastenden Unterrichtssituationen – ressourcenorientiert statt "
+        "reiner Stressvermeidung.",
         "status": "in Entwicklung",
     },
     {
         "nr": 3,
         "bereich": "Personale Kompetenzen",
-        "titel": "Achtsamkeit und Commitment",
-        "kurz": "Im dritten Modul behandeln wir verschiedene Ansätze, um Achtsamkeit"
-        "im Schulalltag zu üben und Akzeptanz für belastende Gedanken und Emotionen zu" 
-        "erreichen. Darüber hinaus  laden wir die teilnehmenden Lehrkräfte dazu ein," 
-        "ihre individuellen berufsbezogenen Werte zu reflektieren und erarbeiten auf"
-        "dieser Basis Möglichkeiten, ihr berufliches Handeln (wieder) an ebendiesen" 
-        "Werten auszurichten.",
+        "titel": "Achtsamkeit und Wertorientierung",
+        "kurz": "Achtsamkeitsbasierte Übungen und Werteklärung nach dem "
+        "Ansatz der Akzeptanz- und Commitment-Therapie (ACT), um "
+        "professionelles Handeln nachhaltig zu verankern.",
         "status": "in Entwicklung",
     },
     {
         "nr": 4,
         "bereich": "Soziale Kompetenzen",
-        "titel": "Perspektivübernahme",
-        "kurz": "Im vierten Modul richten wir unseren Blick auf die häufigsten" 
-        "Interaktionspartner:innen im schulischen Alltag: die Schüler:innen. Wir" 
-        "betrachten Möglichkeiten, ihre Perspektive einzunehmen und ihre Handlungen" 
-        "nachzuvollziehen, um Ansatzpunkte für eine gelingende Verständigung im"
-        "Unterricht und darüber hinaus zu finden.",
+        "titel": "Perspektivübernahme und Empathie",
+        "kurz": "Empathische Perspektivübernahme gegenüber Schüler:innen als "
+        "Grundlage für responsives, entwicklungsförderndes pädagogisches "
+        "Handeln.",
         "status": "in Entwicklung",
     },
     {
         "nr": 5,
         "bereich": "Soziale Kompetenzen",
-        "titel": "Beziehungsgestaltung",
-        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der" 
-        "Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine"
-        "Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen"
-        "Voraussetzungen für eine professionelle Wahrnehmung der"
-        "Lehrkraft-Schüler:innen-Beziehung und wie der Unterricht so gestaltet" 
-        "werden kann, dass er die  psychologischen Grundbedürfnisse nach" 
-        "Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
+        "titel": "Beziehungsorientierter Unterricht",
+        "kurz": "Aufbau tragfähiger Lehrkraft-Schüler:innen-Beziehungen als "
+        "Schutzfaktor – mit besonderer Relevanz für Schüler:innen mit "
+        "hohen Bildungsrisiken.",
         "status": "in Entwicklung",
     },
     {
         "nr": 6,
         "bereich": "Soziale Kompetenzen",
-        "titel": "Konflikte konstruktiv lösen",
-        "kurz": "Im fünften Modul stellen wir positive Ausgestaltung der" 
-        "Lehrkraft-Schüler:innen-Beziehung in den Mittelpunkt, weil diese eine" 
-        "Grundlage erfolgreichen Lernens darstellt. Wir besprechen die notwendigen" 
-        "Voraussetzungen für eine professionelle Wahrnehmung der Lehrkraft-Schüler:innen-Beziehung" 
-        "und wie der Unterricht so gestaltet werden kann, dass er die  psychologischen" 
-        "Grundbedürfnisse nach Autonomie, Kompetenz und sozialer Eingebundenheit unterstützt.",
+        "titel": "Konstruktive Konfliktbewältigung",
+        "kurz": "Haltungs- und beziehungsorientierter Ansatz (Deeskalation "
+        "vor Klärung) statt Technikzentrierung, mit durchgehendem "
+        "Fallbeispiel. 120-minütiges Online-Modul in vier Blöcken: "
+        "Konfliktdefinition, akute Konfliktsituation, Notfall-Deeskalation, "
+        "ruhige Klärung.",
         "status": "vollständig ausgearbeitet",
     },
 ]
@@ -430,13 +444,15 @@ def inject_css():
             color: rgba(90,90,90,1);
         }
 
-        /* Info-/Dividend-Karten auf Ansatz-Seite */
+        /* Info-/Dividend-Karten auf Ansatz-Seite, auch für die Hinweise-Seite
+           genutzt */
         .info-card {
             padding: 1.1rem 1.3rem;
             border-radius: 12px;
             border: 1px solid rgba(128,128,128,0.22);
             background-color: rgba(128,128,128,0.03);
             height: 100%;
+            margin-bottom: 0.9rem;
         }
 
         .info-card h4 {

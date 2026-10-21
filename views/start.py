@@ -1,6 +1,6 @@
 import streamlit as st
 
-from common import MODULES, inject_css
+from common import inject_css
 
 inject_css()
 
@@ -8,27 +8,22 @@ inject_css()
 # HERO
 # =============================================================================
 
-st.title(
-    "SOKO-L³ | Lehrkräftefortbildung zur Förderung der sozial-emotionalen Kompetenzen"
-)
+st.title("SOKO-L³ | Lehrkräftefortbildung Sozial-emotionale Kompetenzen")
 
 st.markdown(
     """
     **Ein sechsteiliges Fortbildungsangebot für Lehrkräfte an Schulen in
     benachteiligten Lagen bzw. mit Schülerschaft mit hohen Bildungsrisiken.**
 
-    **Entwickelt im Rahmen der wissenschaftlichen Begleitung eines
+    Entwickelt im Rahmen der wissenschaftlichen Begleitung eines
     Startchancen-Programm-Projekts am Interdisziplinären Kompetenzzentrum
-    Überfachliches Lernen (IKOM ÜL); gefördert durch das Bundesministerium 
-    für Bildung, Familie, Senioren, Frauen und Jugend.** 
-    
-    Die teilnehmenden Lehrkräfte stärken zunächst
+    Überfachliches Lernen (IKOM ÜL). Die teilnehmenden Lehrkräfte stärken zunächst
     ihre eigenen sozial-emotionalen Kompetenzen; diese sollen als Grundlage für
-    einen souveränen Umgang mit herausfordernden Situationen und die Gestaltung 
+    einen souveränen Umgang mit herausfordernden Situationen und die Gestaltung
     tragfähiger Beziehungen zu den Schüler:innen dienen. Zusätzlich erhalten die
     Lehrkräfte passgenaue Materialien, um die Inhalte direkt mit ihren Klassen zu erarbeiten.
-    Die Fortbildung vermittelt unmittelbar einsetzbare Strategien für den Schulalltag, 
-    die sich an den Bedarfen von Schulen mit besonderen Herausforderungen orientieren, 
+    Die Fortbildung vermittelt unmittelbar einsetzbare Strategien für den Schulalltag,
+    die sich an den Bedarfen von Schulen mit besonderen Herausforderungen orientieren,
     ohne eine defizitorientierte Perspektive einzunehmen.
     """
 )
@@ -183,3 +178,17 @@ with pillar_col2:
             render_module_card(module, "soziale")
 
 st.divider()
+
+# =============================================================================
+# CTA
+# =============================================================================
+
+cta_col1, cta_col2 = st.columns(2)
+
+with cta_col1:
+    st.markdown("**Sie möchten wissen, was die einzelnen Module inhaltlich abdecken?**")
+    st.page_link("views/module.py", label="Zu den Modulen im Überblick", icon="🧩")
+
+with cta_col2:
+    st.markdown("**Sie suchen konkrete Übungen für den Unterricht?**")
+    st.page_link("views/uebungssammlung.py", label="Zur Übungssammlung", icon="📚")

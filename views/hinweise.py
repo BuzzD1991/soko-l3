@@ -8,70 +8,108 @@ st.title("Hinweise für Lehrkräfte")
 
 st.markdown(
     """
-    Die einzelnen Übungen aus der Übungssammlung wirken am besten, wenn sie
-    in einen größeren Rahmen eingebettet sind. Die folgenden beiden
-    Impulse sind deshalb nicht an eine konkrete Übung gebunden, sondern
-    beschreiben übergreifend, wie das Gelernte nachbereitet und dauerhaft
-    im Schulalltag verankert werden kann.
+    Die einzelnen Übungen wirken am besten, wenn sie in einen größeren
+    Rahmen eingebettet sind. Die folgenden beiden Impulse sind deshalb
+    nicht an eine konkrete Übung gebunden, sondern zeigen übergreifend,
+    wie das Gelernte nachbesprochen und dauerhaft im Schulalltag verankert
+    werden kann.
     """
 )
 
 st.divider()
 
 # =============================================================================
-# 1. REFLEXION NACH DER ÜBUNG
+# 1. NACHBESPRECHUNG ANLEITEN
 # =============================================================================
 
-st.subheader("1. Reflexion nach der Übung anleiten")
+st.subheader("1. Eine Übung nachbesprechen")
 
 st.markdown(
     """
-    Um Schülerinnen und Schülern dabei zu helfen, einen Zusammenhang
-    zwischen bestimmten sozial-emotionalen Kompetenzen (SEL) und
-    Aktivitäten herzustellen, wird empfohlen, dass pädagogische
-    Fachkräfte nach Abschluss einer Aktivität ein Gespräch anhand einiger
-    der folgenden Impulse und Fragen moderieren. Die Aktivität sollte sich
-    auf eine bestimmte SEL-Kompetenz beziehen, die zuvor ausdrücklich
-    vermittelt wurde. Die Fragen und Impulse sind für Gespräche in der
-    Gruppe gedacht.
+    Eine Übung wirkt stärker, wenn sie nicht für sich steht, sondern im
+    Anschluss kurz reflektiert wird. Moderieren Sie dazu ein Gespräch, das
+    die Erfahrung auf die zuvor ausdrücklich vermittelte SEL-Kompetenz
+    zurückbezieht – vier aufeinander aufbauende Phasen haben sich dafür
+    bewährt.
     """
 )
 
 st.info(
-    "Hinweis: Je nach den unterschiedlichen Lernvoraussetzungen innerhalb "
-    "einer Gruppe müssen möglicherweise Anpassungen vorgenommen werden, "
-    "damit alle teilnehmen können."
+    "Je nach Lernvoraussetzungen innerhalb der Gruppe können Anpassungen "
+    "nötig sein, damit alle teilnehmen können."
 )
 
-st.markdown("**Impulse und Fragen zur Reflexion**")
+REFLECTION_PHASES = [
+    {
+        "icon": "🌬️",
+        "titel": "1. Ankommen",
+        "fragen": [
+            "Nimm dir einen Moment Zeit und spüre in dich hinein – achte "
+            "auf deine Atmung sowie auf Gefühle und Gedanken, die gerade "
+            "da sind.",
+        ],
+    },
+    {
+        "icon": "💭",
+        "titel": "2. Eigene Erfahrung benennen",
+        "fragen": [
+            "Wie hast du dich bei dieser Aktivität gefühlt, und was hat "
+            "dazu geführt?",
+            "Was hast du dabei an dir selbst bemerkt?",
+        ],
+    },
+    {
+        "icon": "👥",
+        "titel": "3. Die Gruppe einbeziehen",
+        "fragen": [
+            "Wem ging es ähnlich? Wer hat sich vielleicht anders gefühlt?",
+            "Was hast du in unserer Gruppe beobachtet, das hilfreich "
+            "war – und was eher schwierig?",
+        ],
+    },
+    {
+        "icon": "🔗",
+        "titel": "4. Transfer herstellen",
+        "fragen": [
+            "Welche sozial-emotionale Kompetenz haben wir bei dieser "
+            "Aktivität eingesetzt?",
+            "In welchen Situationen im Schulalltag könnten wir sie "
+            "ebenfalls brauchen?",
+            "Was könnten wir beim nächsten Mal anders machen?",
+        ],
+    },
+]
 
-st.markdown(
-    """
-    - Nimm dir einen Moment Zeit, halte inne und spüre in dich hinein.
-      Achte auf deine Atmung und auf alle Gefühle und Gedanken, die du
-      gerade wahrnimmst.
-    - Wie hast du dich bei dieser Aktivität gefühlt? Was ist passiert, das
-      dazu geführt hat, dass du dich so gefühlt hast?
-    - Wem ging es ähnlich? Wer hat sich möglicherweise anders gefühlt?
-    - Was hast du während der Aktivität an dir selbst bemerkt?
-    - Was hast du während der Aktivität in unserer Gruppe beobachtet, das
-      hilfreich war?
-    - Welche sozial-emotionalen Kompetenzen (SEL) haben wir bei dieser
-      Aktivität eingesetzt?
-    - In welchen Situationen während des Schultages könnte es ebenfalls
-      nötig sein, diese Kompetenzen einzusetzen?
-    - Was hast du während der Aktivität in unserer Gruppe beobachtet, das
-      möglicherweise schwierig war?
-    - Was könnten wir beim nächsten Mal anders machen, damit es besser
-      gelingt?
-    """
-)
+def render_phase_card(column, phase):
 
-st.markdown(
-    "*Wie haben die Schülerinnen und Schüler auf diese Reflexionsübung "
-    "reagiert? Zeigen sie dadurch sowohl im Unterricht als auch außerhalb "
-    "des Unterrichts ein größeres Bewusstsein für sozial-emotionale "
-    "Kompetenzen (SEL) und wenden sie diese häufiger an?*"
+    fragen_html = "".join(f"<li>{frage}</li>" for frage in phase["fragen"])
+
+    with column:
+        st.markdown(
+            f"""
+            <div class="info-card">
+            <h4>{phase["icon"]} {phase["titel"]}</h4>
+            <ul style="margin-bottom:0; padding-left:1.1rem;">{fragen_html}</ul>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+# Zeilenweise angeordnet (nicht spaltenweise), damit die Lesereihenfolge
+# 1 → 2 → 3 → 4 der Lese-/Klickreihenfolge auf der Seite entspricht.
+phase_row1_col1, phase_row1_col2 = st.columns(2)
+render_phase_card(phase_row1_col1, REFLECTION_PHASES[0])
+render_phase_card(phase_row1_col2, REFLECTION_PHASES[1])
+
+phase_row2_col1, phase_row2_col2 = st.columns(2)
+render_phase_card(phase_row2_col1, REFLECTION_PHASES[2])
+render_phase_card(phase_row2_col2, REFLECTION_PHASES[3])
+
+st.success(
+    "**Reflexionsimpuls für Sie:** Zeigen die Schülerinnen und Schüler "
+    "durch diese Nachbesprechungen ein größeres Bewusstsein für "
+    "sozial-emotionale Kompetenzen – im Unterricht wie darüber hinaus?"
 )
 
 st.divider()
@@ -84,141 +122,142 @@ st.subheader("2. Sozial-emotionale Kompetenzen im Schulalltag verankern")
 
 st.markdown(
     """
-    Das Vermitteln konkreter sozial-emotionaler Kompetenzen ist nur der
-    erste Schritt auf dem Weg zum Ziel, dass Schülerinnen und Schüler
-    diese Kompetenzen auch im Alltag anwenden und verinnerlichen. Die
-    folgenden Strategien bieten Orientierung und Unterstützung, damit die
-    Schülerinnen und Schüler ihre erlernten SEL-Kompetenzen in allen
-    Lebensbereichen einsetzen können.
+    Das Vermitteln konkreter Kompetenzen ist nur der erste Schritt. Damit
+    Schülerinnen und Schüler sie auch im Alltag anwenden und
+    verinnerlichen, braucht es Gelegenheiten zum Üben, zum Vorleben und
+    zur Anerkennung – im Unterricht wie in der gesamten Schulgemeinschaft.
     """
 )
 
 st.info(
-    "Option: Erstelle einen konkreten Plan mit Zeiten, Terminen und "
-    "Unterrichtseinheiten, die du einsetzen möchtest, um die Anwendung "
+    "**Tipp:** Legen Sie einen konkreten Plan mit festen Zeiten und "
+    "Unterrichtseinheiten an, mit denen Sie die Anwendung "
     "sozial-emotionaler Kompetenzen im Klassenzimmer und in der gesamten "
-    "Schule zu fördern."
+    "Schule fördern möchten."
 )
 
-strategy_col1, strategy_col2 = st.columns(2)
+st.markdown("#### Im Unterricht")
 
-with strategy_col1:
+UNTERRICHT_STRATEGIEN = [
+    {
+        "icon": "🔁",
+        "titel": "Beständigkeit",
+        "text": (
+            "Vermitteln Sie sozial-emotionale Kompetenzen regelmäßig und "
+            "konsequent – fest eingeplant im Wochenablauf statt als "
+            "Gelegenheitsthema."
+        ),
+    },
+    {
+        "icon": "🗣️",
+        "titel": "Vorleben und benennen",
+        "text": (
+            "Nutzen Sie eigene Momente, um eine Kompetenz vorzuleben und "
+            "ausdrücklich zu benennen. Beispiel: „Ich bin gerade "
+            "verärgert und muss erst ruhig durchatmen, bevor wir "
+            "weitermachen.“"
+        ),
+    },
+    {
+        "icon": "🤝",
+        "titel": "In der Gruppenarbeit üben",
+        "text": (
+            "Geben Sie neben der fachlichen Aufgabe gezielt eine "
+            "SEL-Kompetenz mit, die die Zusammenarbeit verbessert – etwa "
+            "aktives Zuhören oder Problemlösung."
+        ),
+    },
+    {
+        "icon": "👏",
+        "titel": "Anwendung anerkennen",
+        "text": (
+            "Benennen Sie positive Auswirkungen konkret: „Mir ist "
+            "aufgefallen, dass du gerade [Kompetenz] einsetzt – das wird "
+            "dir dabei helfen, …“"
+        ),
+    },
+    {
+        "icon": "📖",
+        "titel": "Verbindung zu Büchern herstellen",
+        "text": (
+            "Greifen Sie Gefühle aus gelesenen Geschichten auf, z. B.: "
+            "„Wie fühlt sich die Figur gerade? Hast du dich auch schon "
+            "einmal so gefühlt?“"
+        ),
+    },
+]
 
-    st.markdown(
-        """
-        <div class="info-card">
-        <h4>Beständigkeit</h4>
-        Vermittle sozial-emotionale Kompetenzen regelmäßig und
-        konsequent. Plane sie fest in deinen Wochenablauf ein und
-        reserviere dafür bestimmte Zeiten.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+def render_strategy_card(column, strategie):
 
-    st.markdown(
-        """
-        <div class="info-card">
-        <h4>Die Kompetenz vorleben und benennen</h4>
-        Nutze Gelegenheiten, um SEL-Kompetenzen vor deinen Schülerinnen
-        und Schülern vorzuleben und ausdrücklich zu benennen. Wenn du
-        beispielsweise selbst verärgert oder aufgewühlt bist, übe vor den
-        Schülerinnen und Schülern bewusst ruhiges Atmen und erkläre, was
-        du gerade tust. Du könntest etwa sagen: „Ich bin gerade verärgert
-        und muss erst ein paar Mal ruhig durchatmen, bevor wir
-        weitermachen.“
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    with column:
+        st.markdown(
+            f"""
+            <div class="info-card">
+            <h4>{strategie["icon"]} {strategie["titel"]}</h4>
+            {strategie["text"]}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    st.markdown(
-        """
-        <div class="info-card">
-        <h4>Während der Gruppenarbeit fachliche und soziale Kompetenzen üben</h4>
-        Gib den Schülerinnen und Schülern bei Gruppenarbeiten neben einer
-        fachlichen Aufgabe auch eine SEL-Kompetenz, die sie gezielt üben
-        sollen und die das gemeinsame Arbeiten verbessern kann, zum
-        Beispiel Zusammenarbeit, aktives Zuhören oder Problemlösung.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
-with strategy_col2:
+# Wieder zeilenweise (nicht spaltenweise) für die korrekte Lesereihenfolge;
+# bei fünf Karten bleibt die letzte Spalte der dritten Zeile leer.
+strat_row1_col1, strat_row1_col2 = st.columns(2)
+render_strategy_card(strat_row1_col1, UNTERRICHT_STRATEGIEN[0])
+render_strategy_card(strat_row1_col2, UNTERRICHT_STRATEGIEN[1])
 
-    st.markdown(
-        """
-        <div class="info-card">
-        <h4>Die positiven Auswirkungen der Anwendung von SEL-Kompetenzen anerkennen</h4>
-        Du könntest beispielsweise sagen: „Mir ist aufgefallen, dass du
-        gerade die Kompetenz [Name der SEL-Kompetenz] einsetzt. Dieses
-        Verhalten wird dir dabei helfen, …“ Oder: „Ich habe beobachtet,
-        dass du … getan hast. Dank deiner Bemühungen werden deine
-        Mitschülerinnen und Mitschüler in der Lage sein, …“
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+strat_row2_col1, strat_row2_col2 = st.columns(2)
+render_strategy_card(strat_row2_col1, UNTERRICHT_STRATEGIEN[2])
+render_strategy_card(strat_row2_col2, UNTERRICHT_STRATEGIEN[3])
 
-    st.markdown(
-        """
-        <div class="info-card">
-        <h4>Bei Buchbesprechungen Verbindungen zu SEL-Kompetenzen herstellen</h4>
-        Greife Gefühle im Unterricht auf. Wenn du deinen Schülerinnen und
-        Schülern beispielsweise das Buch <em>When Sophie Gets Angry,
-        Really, Really Angry</em> von Molly Bang vorliest, könntest du
-        fragen: „Wie fühlt sich Sophie wohl gerade? Hast du dich auch
-        schon einmal so gefühlt?“ Stelle Fragen, die dazu anregen,
-        Verbindungen zu SEL-Kompetenzen herzustellen. Beim Lesen von
-        <em>Lilly's Purple Plastic Purse</em> von Kevin Henkes könntest
-        du beispielsweise fragen: „Wie hat Lilly den Prozess der
-        Problemlösung genutzt, um mit der Situation in ihrem
-        Klassenzimmer umzugehen, die sie verärgert hat?“
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+strat_row3_col1, strat_row3_col2 = st.columns(2)
+render_strategy_card(strat_row3_col1, UNTERRICHT_STRATEGIEN[4])
+
+st.markdown("#### In der Schulgemeinschaft")
 
 st.markdown(
     """
-    <div class="info-card">
-    <h4>SEL-Unterricht über das Klassenzimmer hinaus auf die gesamte Schulgemeinschaft ausweiten</h4>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    - Stelle SEL-Begriffe und -Kompetenzen in der Cafeteria, im
-      Eingangsbereich, im Sekretariat, im Krankenzimmer und auf den
-      Fluren sichtbar dar.
-    - Beziehe Fachkräfte aus verschiedenen Bereichen und weiteres
-      Unterstützungspersonal in Fortbildungen ein. So können sie ihre
-      besonderen Beziehungen zu den Schülerinnen und Schülern nutzen, um
-      die Kompetenzen zu stärken und Gelegenheiten zu schaffen, diese zu
-      üben. Wenn die Kinder beispielsweise in den Schulbus steigen,
-      können sie dem Busfahrer oder der Busfahrerin mit einem nach oben
-      oder unten gerichteten Daumen zeigen, wie sie sich an diesem Tag
-      fühlen. Mitarbeitende der Cafeteria können darauf achten, wenn
-      Schülerinnen und Schüler freundlich zueinander sind, und sie dafür
-      loben.
-    - Nutze gemeinschaftsfördernde Aktivitäten und Spiele während der
-      Pausen, zum Beispiel Magic Tag oder Crooked Circle.
-    - Stelle SEL-Kompetenzen bei den morgendlichen Durchsagen in den
-      Mittelpunkt. Ermutige die Schülerinnen und Schüler beispielsweise,
-      im Laufe des Tages Empathie füreinander zu zeigen.
-    - Ermutige die Schülerinnen und Schüler, auf dem Schulhof oder in der
-      Cafeteria ihre Fähigkeiten zur Problemlösung einzusetzen.
-    - Nutze schulweite Zusammenkünfte, Schulversammlungen und
-      Familientreffen als Gelegenheiten, bei denen die Schülerinnen und
-      Schüler teilen können, was sie gelernt haben.
+    SEL wirkt stärker, wenn es über das einzelne Klassenzimmer
+    hinausgeht und von der ganzen Schule mitgetragen wird:
     """
 )
 
-st.markdown(
-    "*Bemerkst du Verbesserungen im Klassen- und/oder Schulklima, seit "
-    "die Schülerinnen und Schüler ihre sozial-emotionalen Kompetenzen "
-    "(SEL) häufiger anwenden?*"
+schulgemeinschaft_col1, schulgemeinschaft_col2 = st.columns(2)
+
+with schulgemeinschaft_col1:
+    st.markdown(
+        """
+        - **Sichtbarkeit schaffen:** SEL-Begriffe und -Kompetenzen in
+          Cafeteria, Eingangsbereich, Sekretariat und auf den Fluren
+          sichtbar darstellen.
+        - **Unterstützungspersonal einbinden:** Fachkräfte aus anderen
+          Bereichen (z. B. Busfahrer:innen, Cafeteria-Personal) nutzen
+          ihre besonderen Beziehungen zu den Schüler:innen, um
+          Kompetenzen zu stärken – etwa per Daumen-hoch/-runter beim
+          Einsteigen in den Bus oder Lob für freundliches Verhalten in
+          der Cafeteria.
+        - **Pausenspiele nutzen:** Gemeinschaftsfördernde Aktivitäten und
+          Spiele in den Pausen einsetzen.
+        """
+    )
+
+with schulgemeinschaft_col2:
+    st.markdown(
+        """
+        - **Morgendliche Durchsagen nutzen:** SEL-Kompetenzen zum Thema
+          machen, z. B. die Schüler:innen ermutigen, im Laufe des Tages
+          Empathie füreinander zu zeigen.
+        - **Schulhof und Cafeteria einbeziehen:** Schüler:innen
+          ermutigen, dort ihre Problemlösefähigkeiten einzusetzen.
+        - **Schulweite Anlässe nutzen:** Versammlungen und
+          Familientreffen als Gelegenheit, bei der Schüler:innen teilen
+          können, was sie gelernt haben.
+        """
+    )
+
+st.success(
+    "**Reflexionsimpuls für Sie:** Bemerken Sie Verbesserungen im Klassen- "
+    "oder Schulklima, seit sozial-emotionale Kompetenzen häufiger "
+    "angewendet werden?"
 )

@@ -37,14 +37,20 @@ Die Excel-Datei besteht aus zwei Tabellenblättern, die über die Spalte
 - **Übersicht** (Kopfzeile in Zeile 3, Daten ab Zeile 4): Übung,
   Kurzbeschreibung der Übung, Dauer (ca.), Zielgruppe, Grundschule,
   Sekundarstufe I, Sekundarstufe II, Anwendungsfälle, Benötigtes
-  Material, Lernziele, Internetquelle, Originalquelle.
+  Material, Lernziele, Emotionswissen, Emotionsregulation, Soziales
+  Wissen, Beziehungsfertigkeiten, Verantwortungsvolle
+  Entscheidungsfindung, Internetquelle, Originalquelle.
 - **Übungsabläufe** (gleiches Kopfzeilen-Schema): Übung, Vor der Übung,
   Während der Übung, Nach der Übung (ggf. Reflexion).
 
 Die drei Altersstufen-Spalten (Grundschule / Sekundarstufe I /
-Sekundarstufe II) sind 0/1-markiert und steuern sowohl die Tags auf den
-Übungskarten als auch den Altersstufen-Filter. Neue Übungen lassen sich
-ohne Codeänderung ergänzen, solange beide Blätter dieselben Spalten in
+Sekundarstufe II) sowie die fünf SEL-Komponenten-Spalten
+(Emotionswissen / Emotionsregulation / Soziales Wissen /
+Beziehungsfertigkeiten / Verantwortungsvolle Entscheidungsfindung) sind
+0/1-markiert und steuern sowohl die Tags auf den Übungskarten als auch
+die beiden Filter im Hauptbereich der Übungssammlung-Seite (`ALTER_COLS`
+bzw. `SEL_COLS` in `common.py`). Neue Übungen lassen sich ohne
+Codeänderung ergänzen, solange beide Blätter dieselben Spalten in
 derselben Reihenfolge verwenden und die Übungsbezeichnung in beiden
 Blättern exakt übereinstimmt.
 
@@ -76,14 +82,18 @@ zusammen sichtbar sind.
 ## Änderungen gegenüber der vorherigen Version
 
 - Die Übungssammlung wurde auf die überarbeitete Excel-Struktur
-  (`Übersicht` + `Übungsabläufe`, drei statt sechs Altersstufen, keine
-  SEL-/Achtsamkeits-Kategorie-Spalten mehr, dafür ein freier
-  "Zielgruppe"-Text sowie "Internetquelle"/"Originalquelle" je Übung)
-  umgestellt.
+  (`Übersicht` + `Übungsabläufe`, drei statt sechs Altersstufen) sowie
+  um die neuen, deutschsprachigen SEL-Komponenten-Spalten umgestellt –
+  dafür gibt es jetzt wieder einen "SEL-Komponente"-Filter, zusätzlich
+  einen freien "Zielgruppe"-Text sowie "Internetquelle"/"Originalquelle"
+  je Übung.
 - Die Seite "Ressourcen" wurde entfernt, da die zugrunde liegende
   Tabelle (ehemals `Tabelle1`) in der neuen Datei nicht mehr existiert.
   Die Quellenangaben erscheinen stattdessen direkt bei jeder Übung
   (Abschnitt "Quelle").
 - Neue Seite "Hinweise für Lehrkräfte" mit zwei übungsübergreifenden
-  Impulsen: Reflexion nach einer Übung anleiten, SEL-Kompetenzen im
-  Schulalltag verankern.
+  Impulsen: Eine Übung nachbesprechen (als vier Reflexionsphasen
+  aufbereitet) und SEL-Kompetenzen im Schulalltag verankern (als
+  Strategiekarten, gruppiert nach "Im Unterricht" und "In der
+  Schulgemeinschaft"). Die Inhalte sind redaktionell aufbereitet statt
+  wörtlich aus der Vorlage übernommen.

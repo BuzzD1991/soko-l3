@@ -4,9 +4,11 @@ import streamlit as st
 
 from common import (
     ALTER_COLS,
+    SEL_COLS,
     display_tags,
     filter_data,
     get_altersstufen,
+    get_sel_komponenten,
     inject_css,
     load_data,
     render_quelle,
@@ -40,14 +42,16 @@ st.markdown(
     Achtsamkeits- und Reflexionsübungen aus der Schulpraxis und
     einschlägiger Fachliteratur. Beide Übungstypen sind als kurze, in den
     laufenden Unterricht eingebettete Aktivitäten konzipiert, ohne ein
-    zusätzliches Curriculum zu erfordern.
+    zusätzliches Curriculum zu erfordern. Jede Übung ist zusätzlich den
+    sozial-emotionalen Kompetenzen zugeordnet, die sie vorrangig
+    adressiert.
 
     **Vorteile**
     Die Übungen zeichnen sich durch niedrige Implementationshürden aus:
     Sie sind kostenfrei, flexibel adaptierbar und erfordern minimalen
     Zeitaufwand. Lehrkräfte können gezielt jene Übung auswählen, die der
-    Zielgruppe und dem aktuellen Bedarf ihrer Lerngruppe entspricht, ohne
-    ein verpflichtendes Gesamtpaket abarbeiten zu müssen.
+    Zielgruppe und dem aktuellen Kompetenzbedarf ihrer Lerngruppe
+    entspricht, ohne ein verpflichtendes Gesamtpaket abarbeiten zu müssen.
 
     **Einschränkungen**
     Die Übungen sind universelle Praktiken für die breite Schülerschaft
@@ -80,33 +84,101 @@ with st.container(border=True):
 
         if st.button("Zurücksetzen", width="stretch"):
 
-            for widget_key in ("filter_search", "filter_alter"):
+            for widget_key in ("filter_search", "filter_alter", "filter_sel"):
                 st.session_state.pop(widget_key, None)
 
             st.rerun()
 
-    search_col, alter_col = st.columns([3, 2])
+    search_term = st.text_input(
+        "Suchbegriff",
+        placeholder="z. B. Achtsamkeit, Beziehungsaufbau",
+        help="Durchsucht Übung, Kurzbeschreibung, Zielgruppe, Lernziele und Anwendungsfälle.",
+        key="filter_search",
+    )
 
-    with search_col:
-        search_term = st.text_input(
-            "Suchbegriff",
-            placeholder="z. B. Achtsamkeit, Beziehungsaufbau",
-            help="Durchsucht Übung, Kurzbeschreibung, Zielgruppe, Lernziele und Anwendungsfälle.",
-            key="filter_search",
-        )
+    alter_col, sel_col = st.columns(2)
 
     with alter_col:
         selected_alter = st.multiselect(
             "Altersstufe", list(ALTER_COLS.keys()), key="filter_alter"
         )
 
-df_filtered = filter_data(df_uebungen, selected_alter, search_term)
+    with sel_col:
+        selected_sel = st.multiselect(
+            "SEL-Komponente", list(SEL_COLS.keys()), key="filter_sel"
+        )
+
+df_filtered = filter_data(df_uebungen, selected_alter, selected_sel, search_term)
 
 # =============================================================================
 # TABS
 # =============================================================================
 
 tab_discover, tab_search = st.tabs(["Übung entdecken", "Übungen suchen"])
+
+
+def render_tags_row(row):
+    """Zeigt Altersstufen- und SEL-Komponenten-Tags nebeneinander sowie,
+    falls vorhanden, die Zielgruppe als eigene Zeile darunter."""
+
+    alter = get_altersstufen(row)
+    sel = get_sel_komponenten(row)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("**Altersstufen**")
+        st.markdown(display_tags(alter), unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("**SEL-Komponenten**")
+        st.markdown(display_tags(sel), unsafe_allow_html=True)
+
+    zielgruppe = safe_text(row, "Zielgruppe")
+
+    if zielgruppe:
+        st.markdown(f"**Zielgruppe:** {zielgruppe}")
+
+
+def render_exercise_body(row):
+    """Gemeinsamer Anzeige-Teil (Kurzbeschreibung bis Quelle) für beide
+    Tabs."""
+
+    st.markdown("### Kurzbeschreibung")
+    st.markdown(
+        safe_text(row, "Kurzbeschreibung der Übung") or "Keine Beschreibung vorhanden."
+    )
+
+    with st.expander("Lernziele", expanded=True):
+        st.markdown(safe_text(row, "Lernziele") or "Keine Angaben vorhanden.")
+
+    with st.expander("Material"):
+        st.markdown(safe_text(row, "Benötigtes Material") or "Keine Angaben vorhanden.")
+
+    with st.expander("Anwendungsfälle"):
+        st.markdown(safe_text(row, "Anwendungsfälle") or "Keine Angaben vorhanden.")
+
+    with st.expander("Durchführung"):
+
+        before = safe_text(row, "Vor der Übung")
+        during = safe_text(row, "Während der Übung")
+        after = safe_text(row, "Nach der Übung (ggf. Reflexion)")
+
+        if before:
+            st.markdown("**Vorher – Vorbereitung**")
+            st.markdown(before)
+
+        if during:
+            st.markdown("**Während der Übung**")
+            st.markdown(during)
+
+        if after:
+            st.markdown("**Nachher – Reflexion**")
+            st.markdown(after)
+
+    with st.expander("Quelle"):
+        st.markdown(render_quelle(row))
+
 
 # -----------------------------------------------------------------------
 # Tab: Übung entdecken (Zufallsvorschlag)
@@ -137,7 +209,6 @@ with tab_discover:
         if idx < len(df_filtered):
 
             row = df_filtered.iloc[idx]
-            alter = get_altersstufen(row)
 
             st.markdown(
                 f"""
@@ -150,55 +221,9 @@ with tab_discover:
                 unsafe_allow_html=True,
             )
 
-            col1, col2 = st.columns([1, 2])
-
-            with col1:
-                st.markdown("**Altersstufen**")
-                st.markdown(display_tags(alter), unsafe_allow_html=True)
-
-            with col2:
-                st.markdown("**Zielgruppe**")
-                st.markdown(safe_text(row, "Zielgruppe") or "–")
-
+            render_tags_row(row)
             st.divider()
-
-            st.markdown("### Kurzbeschreibung")
-            st.markdown(
-                safe_text(row, "Kurzbeschreibung der Übung")
-                or "Keine Beschreibung vorhanden."
-            )
-
-            with st.expander("Lernziele", expanded=True):
-                st.markdown(safe_text(row, "Lernziele") or "Keine Angaben vorhanden.")
-
-            with st.expander("Material"):
-                st.markdown(
-                    safe_text(row, "Benötigtes Material") or "Keine Angaben vorhanden."
-                )
-
-            with st.expander("Anwendungsfälle"):
-                st.markdown(safe_text(row, "Anwendungsfälle") or "Keine Angaben vorhanden.")
-
-            with st.expander("Durchführung"):
-
-                before = safe_text(row, "Vor der Übung")
-                during = safe_text(row, "Während der Übung")
-                after = safe_text(row, "Nach der Übung (ggf. Reflexion)")
-
-                if before:
-                    st.markdown("**Vorher – Vorbereitung**")
-                    st.markdown(before)
-
-                if during:
-                    st.markdown("**Während der Übung**")
-                    st.markdown(during)
-
-                if after:
-                    st.markdown("**Nachher – Reflexion**")
-                    st.markdown(after)
-
-            with st.expander("Quelle"):
-                st.markdown(render_quelle(row))
+            render_exercise_body(row)
 
 # -----------------------------------------------------------------------
 # Tab: Übungen suchen
@@ -225,7 +250,6 @@ with tab_search:
         )
 
         row = df_filtered.iloc[selected_idx]
-        alter = get_altersstufen(row)
 
         st.markdown(
             f"""
@@ -237,52 +261,6 @@ with tab_search:
             unsafe_allow_html=True,
         )
 
-        col1, col2 = st.columns([1, 2])
-
-        with col1:
-            st.markdown("**Altersstufen**")
-            st.markdown(display_tags(alter), unsafe_allow_html=True)
-
-        with col2:
-            st.markdown("**Zielgruppe**")
-            st.markdown(safe_text(row, "Zielgruppe") or "–")
-
+        render_tags_row(row)
         st.divider()
-
-        st.markdown("### Kurzbeschreibung")
-        st.markdown(
-            safe_text(row, "Kurzbeschreibung der Übung")
-            or "Keine Beschreibung vorhanden."
-        )
-
-        with st.expander("Lernziele", expanded=True):
-            st.markdown(safe_text(row, "Lernziele") or "Keine Angaben vorhanden.")
-
-        with st.expander("Material"):
-            st.markdown(
-                safe_text(row, "Benötigtes Material") or "Keine Angaben vorhanden."
-            )
-
-        with st.expander("Anwendungsfälle"):
-            st.markdown(safe_text(row, "Anwendungsfälle") or "Keine Angaben vorhanden.")
-
-        with st.expander("Durchführung"):
-
-            before = safe_text(row, "Vor der Übung")
-            during = safe_text(row, "Während der Übung")
-            after = safe_text(row, "Nach der Übung (ggf. Reflexion)")
-
-            if before:
-                st.markdown("**Vorher – Vorbereitung**")
-                st.markdown(before)
-
-            if during:
-                st.markdown("**Während der Übung**")
-                st.markdown(during)
-
-            if after:
-                st.markdown("**Nachher – Reflexion**")
-                st.markdown(after)
-
-        with st.expander("Quelle"):
-            st.markdown(render_quelle(row))
+        render_exercise_body(row)

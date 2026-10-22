@@ -110,6 +110,16 @@ ALTER_COLS = {
     "Sekundarstufe II": "Sekundarstufe II",
 }
 
+# SEL-Komponenten nach dem CASEL-Modell, in der überarbeiteten Datei bereits
+# deutschsprachig benannt (Spaltenname = Anzeigename).
+SEL_COLS = {
+    "Emotionswissen": "Emotionswissen",
+    "Emotionsregulation": "Emotionsregulation",
+    "Soziales Wissen": "Soziales Wissen",
+    "Beziehungsfertigkeiten": "Beziehungsfertigkeiten",
+    "Verantwortungsvolle Entscheidungsfindung": "Verantwortungsvolle Entscheidungsfindung",
+}
+
 TEXT_COLUMNS = [
     "Übung",
     "Kurzbeschreibung der Übung",
@@ -158,17 +168,49 @@ def safe_html(row, column):
     return html.escape(safe_text(row, column))
 
 
-def get_altersstufen(row):
-    """Liefert die Liste der für diese Übung markierten Altersstufen."""
+def get_tags(row, cols_dict):
+    """Liefert die Liste der für diese Übung markierten Labels aus einem
+    Spalten-Mapping (z. B. ALTER_COLS oder SEL_COLS)."""
 
     return [
         label
-        for label, column in ALTER_COLS.items()
+        for label, column in cols_dict.items()
         if column in row.index and is_marked(row[column])
     ]
 
 
-def filter_data(df_uebungen, selected_alter, search_term):
+def get_altersstufen(row):
+    """Liefert die Liste der für diese Übung markierten Altersstufen."""
+
+    return get_tags(row, ALTER_COLS)
+
+
+def get_sel_komponenten(row):
+    """Liefert die Liste der für diese Übung markierten SEL-Komponenten."""
+
+    return get_tags(row, SEL_COLS)
+
+
+def _filter_by_tags(df_uebungen, selected_labels, cols_dict):
+    """Filtert df_uebungen auf Zeilen, bei denen mindestens eine der
+    ausgewählten Spalten aus cols_dict markiert ist (ODER-Verknüpfung
+    innerhalb einer Filterdimension)."""
+
+    if not selected_labels:
+        return df_uebungen
+
+    columns = [
+        cols_dict[x] for x in selected_labels if cols_dict[x] in df_uebungen.columns
+    ]
+
+    if not columns:
+        return df_uebungen
+
+    mask = df_uebungen[columns].map(is_marked).any(axis=1)
+    return df_uebungen[mask]
+
+
+def filter_data(df_uebungen, selected_alter, selected_sel, search_term):
 
     df_uebungen = df_uebungen.copy()
 
@@ -176,17 +218,13 @@ def filter_data(df_uebungen, selected_alter, search_term):
     # Altersstufen
     # -------------------------------------------------------------------
 
-    if selected_alter:
+    df_uebungen = _filter_by_tags(df_uebungen, selected_alter, ALTER_COLS)
 
-        columns = [
-            ALTER_COLS[x]
-            for x in selected_alter
-            if ALTER_COLS[x] in df_uebungen.columns
-        ]
+    # -------------------------------------------------------------------
+    # SEL-Komponenten
+    # -------------------------------------------------------------------
 
-        if columns:
-            mask = df_uebungen[columns].map(is_marked).any(axis=1)
-            df_uebungen = df_uebungen[mask]
+    df_uebungen = _filter_by_tags(df_uebungen, selected_sel, SEL_COLS)
 
     # -------------------------------------------------------------------
     # Volltextsuche
